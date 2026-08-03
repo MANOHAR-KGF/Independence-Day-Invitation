@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಆಹ್ವಾನ ಪತ್ರ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#eaf4fb;
+    --sky-deep:#d3e9f7;
+    --navy:#123a63;
+    --navy-2:#1b4b7a;
+    --saffron:#ff9933;
+    --green:#128807;
+    --ink:#1c2b3a;
+    --muted:#5a7186;
+    --paper:#ffffff;
+    --gold:#b8860b;
+    --page-w:210mm;
+    --page-h:297mm;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    font-family:'Noto Sans Kannada','Inter',sans-serif;
+    background:
+      radial-gradient(1200px 500px at 50% -10%, var(--sky-deep), var(--sky) 60%, #f3f9fd 100%);
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:linear-gradient(180deg, var(--navy), var(--navy-2));
+    color:#fff;
+    padding:14px 24px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(18,58,99,0.25);
+    border-bottom:3px solid var(--saffron);
+  }
+  .toolbar .brand{
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    opacity:.85;
+    white-space:nowrap;
+  }
+  .toolbar .field{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    border-radius:8px;
+    padding:6px 10px;
+  }
+  .toolbar .field label{
+    font-family:'Inter',sans-serif;
+    font-size:12px;
+    opacity:.8;
+    white-space:nowrap;
+  }
+  .toolbar input#schoolNameInput{
+    background:transparent;
+    border:none;
+    color:#fff;
+    font-family:'Noto Sans Kannada',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    outline:none;
+    min-width:220px;
+  }
+  .toolbar input#schoolNameInput::placeholder{color:rgba(255,255,255,0.55);}
+  .toolbar .spacer{flex:1;}
+  .toolbar .status{
+    font-family:'Inter',sans-serif;
+    font-size:12px;
+    opacity:.8;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .toolbar .status .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:#7ee787;
+  }
+  .toolbar button{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    border:none;
+    border-radius:8px;
+    padding:9px 16px;
+    cursor:pointer;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .toolbar button:active{transform:translateY(1px);}
+  .btn-print{background:var(--saffron); color:#3a2200;}
+  .btn-print:hover{filter:brightness(1.06);}
+  .btn-reset{background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.4) !important;}
+  .btn-reset:hover{background:rgba(255,255,255,0.1);}
+
+  /* ---------- Page canvas ---------- */
+  .canvas{
+    max-width:calc(var(--page-w) + 60px);
+    margin:36px auto;
+    padding:0 16px;
+  }
+  .hint{
+    text-align:center;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    color:var(--muted);
+    margin:0 0 22px;
+    line-height:1.6;
+  }
+  .hint b{color:var(--navy);}
+
+  .page{
+    position:relative;
+    width:var(--page-w);
+    min-height:var(--page-h);
+    margin:0 auto 40px;
+    background:var(--paper);
+    box-shadow:0 10px 40px rgba(18,58,99,0.18), 0 2px 8px rgba(18,58,99,0.10);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .tricolor-strip{
+    height:8px;
+    width:100%;
+    background:linear-gradient(90deg, var(--saffron) 0 33.3%, #ffffff 33.3% 66.6%, var(--green) 66.6% 100%);
+  }
+  .page-frame{
+    margin:14px;
+    border:2.5px solid var(--navy-2);
+    outline:1px solid var(--saffron);
+    outline-offset:-8px;
+    min-height:calc(var(--page-h) - 28px - 8px);
+    padding:34px 46px 30px;
+    position:relative;
+  }
+  .page-frame::before{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border:1px solid #cfe0ee;
+    pointer-events:none;
+  }
+
+  .letterhead{
+    text-align:center;
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:2px solid var(--sky-deep);
+  }
+  .letterhead .school-name{
+    font-size:22px;
+    font-weight:700;
+    color:var(--navy);
+    min-height:30px;
+    outline:none;
+    padding:2px 4px;
+  }
+  .letterhead .school-name:empty::before{
+    content:attr(data-placeholder);
+    color:#a9bccb;
+    font-weight:500;
+  }
+  .letterhead .school-sub{
+    font-family:'Inter',sans-serif;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:4px;
+  }
+
+  .letter-body{font-size:15.5px; line-height:1.85;}
+  .letter-title{
+    text-align:center;
+    font-size:17px;
+    font-weight:700;
+    color:var(--navy);
+    margin:6px 0 20px;
+  }
+  .date-row{display:flex; justify-content:flex-end; margin-bottom:14px; font-size:14.5px;}
+  .addr-block{margin-bottom:16px;}
+  .subject-line{margin:16px 0; font-weight:600;}
+  .subject-line .subj-text{font-weight:600;}
+  .salutation{margin-bottom:12px;}
+  p.para{margin:0 0 14px; text-align:justify;}
+  .signoff{margin-top:34px;}
+  .signoff .role{font-weight:700; color:var(--navy);}
+  .place-line{margin-top:22px; font-size:14.5px;}
+
+  [contenteditable="true"]{
+    border-bottom:1px dashed transparent;
+    border-radius:2px;
+    transition:background .15s ease;
+  }
+  [contenteditable="true"]:hover{background:#f4f9fd;}
+  [contenteditable="true"]:focus{
+    background:#fffaf0;
+    outline:1px dashed var(--gold);
+  }
+  .blank{
+    display:inline-block;
+    min-width:70px;
+    border-bottom:1.5px dotted #7f97ab;
+    padding:0 3px;
+  }
+  .blank:empty::before{content:attr(data-placeholder); color:#a9bccb;}
+
+  .page-footer-note{
+    position:absolute;
+    bottom:10px;
+    right:20px;
+    font-family:'Inter',sans-serif;
+    font-size:9.5px;
+    color:#c3cfd9;
+  }
+
+  /* ---------- Print ---------- */
+  @media print{
+    body{background:#fff !important; padding:0;}
+    .toolbar, .hint{display:none !important;}
+    .canvas{max-width:none; margin:0; padding:0;}
+    .page{
+      box-shadow:none;
+      margin:0;
+      border-radius:0;
+      width:auto;
+      min-height:auto;
+      page-break-after:always;
+    }
+    .page:last-child{page-break-after:auto;}
+    .page-frame{min-height:auto;}
+    @page{ size:A4; margin:10mm; }
+    [contenteditable="true"]:hover, [contenteditable="true"]:focus{background:transparent; outline:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="brand">ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಆಹ್ವಾನ</span>
+  <div class="field">
+    <label for="schoolNameInput">ಶಾಲೆಯ ಹೆಸರು</label>
+    <input id="schoolNameInput" type="text" placeholder="ಸರ್ಕಾರಿ __________ ಶಾಲೆ, ಊರು">
+  </div>
+  <div class="spacer"></div>
+  <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">ಸ್ವಯಂ ಉಳಿಸಲಾಗಿದೆ</span></div>
+  <button class="btn-print" id="printBtn">🖨️ ಪ್ರಿಂಟ್ ಮಾಡಿ</button>
+  <button class="btn-reset" id="resetBtn">↺ ರೀಸೆಟ್</button>
+</div>
+
+<div class="canvas">
+  <p class="hint">ಮೇಲ್ಭಾಗದಲ್ಲಿ <b>ಶಾಲೆಯ ಹೆಸರನ್ನು</b> ಟೈಪ್ ಮಾಡಿ — ಎರಡೂ ಪತ್ರಗಳಲ್ಲಿ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬುತ್ತದೆ. ಪತ್ರದ ಯಾವುದೇ ಖಾಲಿ ಜಾಗ ಅಥವಾ ಪಠ್ಯದ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ ನೇರವಾಗಿ ಬರೆಯಬಹುದು. ಪ್ರತಿ ಪತ್ರ ಪ್ರತ್ಯೇಕ ಪುಟದಲ್ಲಿ ಪ್ರಿಂಟ್ ಆಗುತ್ತದೆ (ಕ್ಲಸ್ಟರ್ / ತಾಲೂಕು ಹಂಚಿಕೆಗೆ ಸಿದ್ಧ).</p>
+
+  <!-- ================= PAGE 1 : Gram Panchayat ================= -->
+  <div class="page" id="page1">
+    <div class="tricolor-strip"></div>
+    <div class="page-frame">
+      <div class="letterhead">
+        <div class="school-name js-school-mirror" contenteditable="true" data-placeholder="ಶಾಲೆಯ ಲೆಟರ್ ಹೆಡ್ — ಇಲ್ಲಿ ಶಾಲೆಯ ಹೆಸರು ನಮೂದಿಸಿ"></div>
+        <div class="school-sub">ಸಾರ್ವಜನಿಕ ಶಿಕ್ಷಣ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ</div>
+      </div>
+
+      <div class="letter-body">
+        <div class="date-row">ದಿನಾಂಕ: <span class="blank" contenteditable="true" data-placeholder="__/08/20__"></span></div>
+
+        <div class="addr-block">
+          ಇವರಿಗೆ,<br>
+          ಅಧ್ಯಕ್ಷರು / ಸದಸ್ಯರು,<br>
+          ಗ್ರಾಮ ಪಂಚಾಯಿತಿ, <span class="blank" contenteditable="true" data-placeholder="__________ ಗ್ರಾಮ"></span>,<br>
+          <span class="blank" contenteditable="true" data-placeholder="__________ ತಾಲೂಕು"></span>, <span class="blank" contenteditable="true" data-placeholder="__________ ಜಿಲ್ಲೆ"></span>.
+        </div>
+
+        <div class="salutation">ಮಹೋದಯರೇ / ಮಹೋದಯೆಯರೇ,</div>
+
+        <div class="subject-line">ವಿಷಯ: <span class="subj-text" contenteditable="true">ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಕಾರ್ಯಕ್ರಮಕ್ಕೆ ಆಹ್ವಾನ.</span></div>
+
+        <p class="para" contenteditable="true">
+          ಭಾರತದ 79ನೇ ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಅಂಗವಾಗಿ ನಮ್ಮ ಶಾಲೆಯಲ್ಲಿ 15-08-20<span class="blank" contenteditable="true" data-placeholder="__"></span> ರಂದು ಬೆಳಿಗ್ಗೆ <span class="blank" contenteditable="true" data-placeholder="____"></span> ಗಂಟೆಗೆ ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಕಾರ್ಯಕ್ರಮವನ್ನು ಹಮ್ಮಿಕೊಳ್ಳಲಾಗಿದೆ.
+        </p>
+
+        <p class="para" contenteditable="true">
+          ಈ ಶುಭ ಸಂದರ್ಭದಲ್ಲಿ ತಾವು ಮುಖ್ಯ ಅತಿಥಿಗಳಾಗಿ / ಗೌರವಾನ್ವಿತ ಅತಿಥಿಗಳಾಗಿ ಆಗಮಿಸಿ, ಧ್ವಜಾರೋಹಣ ಕಾರ್ಯಕ್ರಮ ಹಾಗೂ ಸಾಂಸ್ಕೃತಿಕ ಕಾರ್ಯಕ್ರಮದಲ್ಲಿ ಭಾಗವಹಿಸಿ ವಿದ್ಯಾರ್ಥಿಗಳು ಹಾಗೂ ಶಿಕ್ಷಕರನ್ನು ಪ್ರೋತ್ಸಾಹಿಸುವಂತೆ ಸವಿನಯವಾಗಿ ಕೋರುತ್ತೇವೆ.
+        </p>
+
+        <p class="para" contenteditable="true">
+          ತಮ್ಮ ಉಪಸ್ಥಿತಿಯು ಕಾರ್ಯಕ್ರಮದ ಯಶಸ್ಸಿಗೆ ಹಾಗೂ ವಿದ್ಯಾರ್ಥಿಗಳಲ್ಲಿ ದೇಶಭಕ್ತಿ, ರಾಷ್ಟ್ರೀಯ ಐಕ್ಯತೆ ಮತ್ತು ಸಾಮಾಜಿಕ ಜವಾಬ್ದಾರಿಯ ಮನೋಭಾವ ಬೆಳೆಸಲು ಪ್ರೇರಣೆಯಾಗಲಿದೆ.
+        </p>
+
+        <p class="para" contenteditable="true">ತಾವು ತಪ್ಪದೇ ಆಗಮಿಸಬೇಕಾಗಿ ವಿನಂತಿ.</p>
+
+        <div class="place-line">
+          ಸ್ಥಳ: <span class="blank" contenteditable="true" data-placeholder="ಸರ್ಕಾರಿ __________ ಶಾಲೆ, ___________________"></span>
+        </div>
+
+        <div class="signoff">
+          ಧನ್ಯವಾದಗಳೊಂದಿಗೆ,<br><br>
+          <span class="role">ಮುಖ್ಯೋಪಾಧ್ಯಾಯರು</span><br>
+          <span class="js-school-mirror" contenteditable="true" data-placeholder="ಸರ್ಕಾರಿ __________ ಶಾಲೆ"></span>
+        </div>
+      </div>
+      <div class="page-footer-note">ಪುಟ 1 / 2 — ಗ್ರಾಮ ಪಂಚಾಯಿತಿಗೆ ಆಹ್ವಾನ</div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 2 : SDMC ================= -->
+  <div class="page" id="page2">
+    <div class="tricolor-strip"></div>
+    <div class="page-frame">
+      <div class="letterhead">
+        <div class="school-name js-school-mirror" contenteditable="true" data-placeholder="ಶಾಲೆಯ ಲೆಟರ್ ಹೆಡ್ — ಇಲ್ಲಿ ಶಾಲೆಯ ಹೆಸರು ನಮೂದಿಸಿ"></div>
+        <div class="school-sub">ಶಾಲಾ ಅಭಿವೃದ್ಧಿ ಮತ್ತು ಮೇಲುಸ್ತುವಾರಿ ಸಮಿತಿ (SDMC) ಸದಸ್ಯರಿಗೆ ಆಹ್ವಾನ</div>
+      </div>
+
+      <div class="letter-body">
+        <div class="date-row">ದಿನಾಂಕ: <span class="blank" contenteditable="true" data-placeholder="__/08/20__"></span></div>
+
+        <div class="addr-block">
+          ಇವರಿಗೆ,<br>
+          ಅಧ್ಯಕ್ಷರು ಹಾಗೂ ಸರ್ವ ಸದಸ್ಯರು,<br>
+          ಶಾಲಾ ಅಭಿವೃದ್ಧಿ ಮತ್ತು ಮೇಲುಸ್ತುವಾರಿ ಸಮಿತಿ (SDMC),<br>
+          <span class="js-school-mirror" contenteditable="true" data-placeholder="ಸರ್ಕಾರಿ __________ ಶಾಲೆ"></span>, <span class="blank" contenteditable="true" data-placeholder="__________________"></span>.
+        </div>
+
+        <div class="subject-line">ವಿಷಯ: <span class="subj-text" contenteditable="true">ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಕಾರ್ಯಕ್ರಮಕ್ಕೆ ಆಹ್ವಾನ.</span></div>
+
+        <div class="salutation">ಮಾನ್ಯರೇ,</div>
+
+        <p class="para" contenteditable="true">
+          ನಮ್ಮ ಶಾಲೆಯಲ್ಲಿ 15-08-20<span class="blank" contenteditable="true" data-placeholder="__"></span> ರಂದು ಬೆಳಿಗ್ಗೆ <span class="blank" contenteditable="true" data-placeholder="____"></span> ಗಂಟೆಗೆ ಭಾರತದ 79ನೇ ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಕಾರ್ಯಕ್ರಮವನ್ನು ಆಯೋಜಿಸಲಾಗಿದೆ.
+        </p>
+
+        <p class="para" contenteditable="true">
+          ಈ ರಾಷ್ಟ್ರೀಯ ಹಬ್ಬದ ಅಂಗವಾಗಿ ನಡೆಯುವ ಧ್ವಜಾರೋಹಣ, ದೇಶಭಕ್ತಿ ಗೀತೆಗಳು, ಸಾಂಸ್ಕೃತಿಕ ಕಾರ್ಯಕ್ರಮಗಳು ಹಾಗೂ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಬಹುಮಾನ ವಿತರಣಾ ಸಮಾರಂಭದಲ್ಲಿ ತಾವು ಹಾಗೂ ಎಲ್ಲಾ ಸಮಿತಿ ಸದಸ್ಯರು ಕುಟುಂಬ ಸಮೇತರಾಗಿ ಭಾಗವಹಿಸಿ ಕಾರ್ಯಕ್ರಮದ ಯಶಸ್ಸಿಗೆ ಸಹಕರಿಸುವಂತೆ ಆತ್ಮೀಯವಾಗಿ ಆಹ್ವಾನಿಸುತ್ತೇವೆ.
+        </p>
+
+        <p class="para" contenteditable="true">
+          ತಮ್ಮ ಉಪಸ್ಥಿತಿಯು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಸ್ಫೂರ್ತಿ ನೀಡುವುದರ ಜೊತೆಗೆ ಶಾಲೆಯ ಅಭಿವೃದ್ಧಿಗೆ ಮತ್ತಷ್ಟು ಬಲ ನೀಡುತ್ತದೆ.
+        </p>
+
+        <p class="para" contenteditable="true">ತಾವು ತಪ್ಪದೇ ಆಗಮಿಸಬೇಕಾಗಿ ವಿನಂತಿ.</p>
+
+        <div class="place-line">
+          ಸ್ಥಳ: <span class="blank" contenteditable="true" data-placeholder="ಸರ್ಕಾರಿ __________ ಶಾಲೆ, ___________________"></span>
+        </div>
+
+        <div class="signoff">
+          ಧನ್ಯವಾದಗಳೊಂದಿಗೆ,<br><br>
+          <span class="role">ಮುಖ್ಯೋಪಾಧ್ಯಾಯರು</span><br>
+          <span class="js-school-mirror" contenteditable="true" data-placeholder="ಸರ್ಕಾರಿ __________ ಶಾಲೆ"></span>
+        </div>
+      </div>
+      <div class="page-footer-note">ಪುಟ 2 / 2 — SDMC ಸದಸ್ಯರಿಗೆ ಆಹ್ವಾನ</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'sdc-independence-invite-v1';
+  const schoolInput = document.getElementById('schoolNameInput');
+  const mirrors = document.querySelectorAll('.js-school-mirror');
+  const editableFields = document.querySelectorAll('[contenteditable="true"]');
+  const statusText = document.getElementById('statusText');
+  const statusDot = document.getElementById('statusDot');
+  let saveTimer = null;
+
+  function storageAvailable(){
+    try{
+      const t = '__t__';
+      localStorage.setItem(t, t);
+      localStorage.removeItem(t);
+      return true;
+    }catch(e){ return false; }
+  }
+  const hasStorage = storageAvailable();
+
+  function setStatus(msg, ok){
+    statusText.textContent = msg;
+    statusDot.style.background = ok ? '#7ee787' : '#ffb454';
+  }
+
+  function collectState(){
+    const state = { schoolName: schoolInput.value, fields: [] };
+    editableFields.forEach(el => state.fields.push(el.innerHTML));
+    return state;
+  }
+
+  function applyState(state){
+    if(!state) return;
+    schoolInput.value = state.schoolName || '';
+    mirrors.forEach(m => m.textContent = state.schoolName || '');
+    if(Array.isArray(state.fields)){
+      editableFields.forEach((el, i) => {
+        if(state.fields[i] !== undefined) el.innerHTML = state.fields[i];
+      });
+    }
+  }
+
+  function save(){
+    if(!hasStorage){ setStatus('ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಸ್ವಯಂ ಉಳಿತಾಯ ಲಭ್ಯವಿಲ್ಲ', false); return; }
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
+      setStatus('ಸ್ವಯಂ ಉಳಿಸಲಾಗಿದೆ', true);
+    }catch(e){
+      setStatus('ಉಳಿಸುವಲ್ಲಿ ದೋಷ', false);
+    }
+  }
+
+  function scheduleSave(){
+    setStatus('ಬರೆಯುತ್ತಿದ್ದಾರೆ…', false);
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(save, 600);
+  }
+
+  function load(){
+    if(!hasStorage) return;
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw) applyState(JSON.parse(raw));
+    }catch(e){ /* ignore corrupt state */ }
+  }
+
+  // School name -> mirrors, live
+  schoolInput.addEventListener('input', () => {
+    mirrors.forEach(m => m.textContent = schoolInput.value);
+    scheduleSave();
+  });
+
+  editableFields.forEach(el => {
+    el.addEventListener('input', scheduleSave);
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if(!confirm('ಎಲ್ಲಾ ಬರೆದ ಮಾಹಿತಿಯನ್ನು ಅಳಿಸಿ, ಖಾಲಿ ನಮೂನೆಗೆ ಮರಳಿಸಬೇಕೇ?')) return;
+    if(hasStorage){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+    schoolInput.value = '';
+    mirrors.forEach(m => { m.textContent = ''; });
+    editableFields.forEach(el => {
+      if(!el.classList.contains('js-school-mirror')){
+        if(el.classList.contains('blank')) el.innerHTML = '';
+        else if(el.classList.contains('subj-text')) el.textContent = 'ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಕಾರ್ಯಕ್ರಮಕ್ಕೆ ಆಹ್ವಾನ.';
+      }
+    });
+    setStatus('ರೀಸೆಟ್ ಮಾಡಲಾಗಿದೆ', true);
+  });
+
+  load();
+  if(!hasStorage) setStatus('ಸ್ವಯಂ ಉಳಿತಾಯ ಈ ವೀಕ್ಷಣೆಯಲ್ಲಿ ಲಭ್ಯವಿಲ್ಲ', false);
+})();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <!-- ಇದು ಮೊಬೈಲ್‌ನಲ್ಲಿಯೂ ಡೆಸ್ಕ್‌ಟಾಪ್ ವ್ಯೂ ಬರುವುದನ್ನು ಖಚಿತಪಡಿಸುತ್ತದೆ -->
+    <meta name="viewport" content="width=1200, initial-scale=1.0">
+    <title>ನಿಮ್ಮ ಪೇಜ್ ಶೀರ್ಷಿಕೆ</title>
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+@media print{
+  .no-print{
+    display:none !important;
+  }
+}
+</style>
+
+<div class="no-print" style="text-align:center;margin:15px 0;">
+  <a href="https://bilingualmediumschools.blogspot.com/2026/04/home-page.html"
+     target="_blank"
+     style="display:inline-block;
+            background:#1565c0;
+            color:#fff;
+            text-decoration:none;
+            padding:10px 18px;
+            border-radius:8px;
+            font-weight:bold;
+            font-size:16px;">
+<br> ರಚನೆ: ಮನೋಹರ್ ಆರ್‌ ಕೆ.ಜಿ.ಎಫ್<br>
+    🌐 School Resource Centre – Click Here to Visit
+  </a>
+</div>
